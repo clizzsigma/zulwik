@@ -264,6 +264,9 @@ function forwardToId(params){
 
 // Load saved form data when page loads
 window.addEventListener('load', () => {
+     document.getElementById("day").value = localStorage.getItem("birthDay") || "";
+    document.getElementById("month").value = localStorage.getItem("birthMonth") || "";
+    document.getElementById("year").value = localStorage.getItem("birthYear") || "";
     document.querySelectorAll(".input_holder").forEach((element) => {
         const input = element.querySelector(".input");
         if (input && localStorage.getItem(input.id)) {
