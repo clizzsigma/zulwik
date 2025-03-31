@@ -1,0 +1,172 @@
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./assets/index.css">
+    <link rel="icon" type="image/x-icon" href="https://play-lh.googleusercontent.com/_TNbiYKasPy_isTSEg2_UEzVaev4F8fO2lLunsHJ8_Ux2g3OzkSZyzpqvJG1woSj-WD4=w240-h480-rw">
+    <title>mObywatel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, user-scalable=no">
+</head>
+<body>
+    <div class="theme-toggle">
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div class="theme-panel">
+        <h3>Wybierz motyw</h3>
+        <div class="theme-options">
+            <div class="theme-option" data-theme="default">
+                <div class="color-preview"></div>
+                <span>Domyślny</span>
+            </div>
+            <div class="theme-option" data-theme="dark">
+                <div class="color-preview"></div>
+                <span>Ciemny</span>
+            </div>
+            <div class="theme-option" data-theme="neon">
+                <div class="color-preview"></div>
+                <span>Neon</span>
+            </div>
+            <div class="theme-option" data-theme="gradient">
+                <div class="color-preview"></div>
+                <span>Gradient</span>
+            </div>
+        </div>
+    </div>
+    <img src="https://play-lh.googleusercontent.com/_TNbiYKasPy_isTSEg2_UEzVaev4F8fO2lLunsHJ8_Ux2g3OzkSZyzpqvJG1woSj-WD4" class="logo">
+
+<div class="header-container">
+    <p class="logo_text">mObywatel Maker by Czawid</p>
+</div>
+<div class="button-container">
+    <a class="generate-btn">Generuj</a>
+    <a class="clear-btn">Wyczyść</a>
+</div>
+
+    <p class="warning">Ta strona jest do robienia fake atrap dodoów do filmów itp.</p>
+
+    <div class="input_holder">
+        <input type="text" id="image" class="input" placeholder="">
+        <span class="placeholder">Link do zdjęcia (imgur)</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <div class="image-preview-modal">
+        <div class="image-preview-content">
+            <button class="close-preview">×</button>
+            <img class="preview-image" src="" alt="Podgląd">
+        </div>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="name" class="input" placeholder="">
+        <span class="placeholder">Imię (imiona)</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="surname" class="input" placeholder="">
+        <span class="placeholder">Nazwisko</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <p class="top_info">Płeć</p>
+    <div class="selector_box">
+        <div class="selected_grid">
+            <p class="selector_text selected_text">Mężczyzna</p>
+            <img class="selected_arrow" src="https://i.imgur.com/RXsdBB6.png">
+        </div>
+        <div class="option_box">
+            <div class="selector_option" id="m">
+                Mężczyzna
+            </div>
+            <div class="selector_option" id="k">
+                Kobieta
+            </div>
+        </div>
+    </div>
+
+    <div class="date">
+        <p class="top_info">Data urodzenia</p>
+        <div class="date_grid">
+            <input class="date_input" placeholder="DD" type="number">
+
+            </input>
+            <input class="date_input" placeholder="MM" type="number">
+
+            </input>
+            <input class="date_input" placeholder="YYYY" type="number">
+
+            </input>
+        </div>
+        <p class="error">Wprowadź prawidłową datę</p>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="nationality" class="input" placeholder="">
+        <span class="placeholder">Obywatelstwo</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="familyName" class="input" placeholder="">
+        <span class="placeholder">Nazwisko rodowe</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="fathersFamilyName" class="input" placeholder="">
+        <span class="placeholder">Nazwisko rodowe ojca</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="mothersFamilyName" class="input" placeholder="">
+        <span class="placeholder">Nazwisko rodowe matki</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <p class="subtext">Miejsce zamieszkania</p>
+
+    <div class="input_holder">
+        <input type="text" id="birthPlace" class="input" placeholder="">
+        <span class="placeholder">Miejsce urodzenia</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="countryOfBirth" class="input" placeholder="">
+        <span class="placeholder">Kraj urodzenia</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="adress1" class="input" placeholder="">
+        <span class="placeholder">Ulica i numer domu</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="adress2" class="input" placeholder="">
+        <span class="placeholder">Kod pocztowy</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <div class="input_holder">
+        <input type="text" id="city" class="input" placeholder="">
+        <span class="placeholder">Miasto</span>
+        <p class="error">To pole jest wymagane</p>
+    </div>
+
+    <a class="go">wejdź</a>
+    <div class="instagram" onclick="window.open('https://www.instagram.com/deyyv.v/')">
+        <div class="inner_grid">
+            <img class="instagram_image" src="https://i.imgur.com/JCi3FSA.png">
+            <p class="instagram_text">Zaobserwój mnie na instagramie</p>
+        </div>
+    </div>
+
+    <script src="./assets/index.js"></script>
+    <script src="./assets/manifest.js"></script>
+</body>
