@@ -241,6 +241,9 @@ function isEmpty(value){
 }
 
 function forwardToId(params){
+     localStorage.setItem("birthDay", document.getElementById("day").value);
+    localStorage.setItem("birthMonth", document.getElementById("month").value);
+    localStorage.setItem("birthYear", document.getElementById("year").value);
     const imageData = params.get('image');
     
     if (imageData) {
