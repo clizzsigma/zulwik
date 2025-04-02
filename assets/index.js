@@ -1,4 +1,4 @@
-
+// Obsługa motywu
 const themeToggle = document.querySelector('.theme-toggle');
 const themePanel = document.querySelector('.theme-panel');
 
@@ -12,13 +12,8 @@ themePanel.addEventListener('mouseleave', () => {
 
 document.querySelectorAll('.theme-option').forEach(option => {
     option.addEventListener('click', () => {
-        // Usuń aktywną klasę z wszystkich opcji
         document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
-        
-        // Dodaj aktywną klasę do klikniętej opcji
         option.classList.add('active');
-        
-        // Zastosuj motyw
         const theme = option.getAttribute('data-theme');
         applyTheme(theme);
     });
@@ -52,22 +47,21 @@ function applyTheme(theme) {
     }
 }
 
+// Obsługa selector box
 var selector = document.querySelector(".selector_box");
 selector.addEventListener('click', () => {
-    if (selector.classList.contains("selector_open")){
-        selector.classList.remove("selector_open")
-    }else{
-        selector.classList.add("selector_open")
-    }
+    selector.classList.toggle("selector_open");
 })
 
+// Obsługa pól daty
 document.querySelectorAll(".date_input").forEach((element) => {
     element.addEventListener('click', () => {
-        document.querySelector(".date").classList.remove("error_shown")
+        document.querySelector(".date").classList.remove("error_shown");
     })
 })
 
-var sex = "m"
+// Domyślna płeć
+var sex = "m";
 
 document.querySelectorAll(".selector_option").forEach((option) => {
     option.addEventListener('click', () => {
@@ -76,15 +70,7 @@ document.querySelectorAll(".selector_option").forEach((option) => {
     })
 })
 
-var upload = document.querySelector(".upload");
-
-document.querySelectorAll(".input_holder").forEach((element) => {
-    var input = element.querySelector(".input");
-    input.addEventListener('click', () => {
-        element.classList.remove("error_shown");
-    })
-});
-
+// Obsługa uploadu zdjęcia
 const input = document.querySelector("#image");
 const previewModal = document.querySelector('.image-preview-modal');
 const previewImage = document.querySelector('.preview-image');
@@ -93,11 +79,8 @@ const closePreview = document.querySelector('.close-preview');
 input.addEventListener('input', (event) => {
     const imgurUrl = event.target.value;
     if (imgurUrl.includes('imgur.com')) {
-        // Clear previous image from localStorage
         localStorage.removeItem('userImage');
         input.setAttribute("selected", imgurUrl);
-        
-        // Show preview
         previewImage.src = imgurUrl;
         previewModal.style.display = 'flex';
     }
@@ -127,6 +110,7 @@ function generateRandomPostcode() {
     return String(Math.floor(Math.random() * 90 + 10)) + "-" + String(Math.floor(Math.random() * 900 + 100));
 }
 
+// Przycisk Clear
 document.querySelector(".clear-btn").addEventListener('click', () => {
     document.querySelectorAll(".input_holder").forEach((element) => {
         var input = element.querySelector(".input");
@@ -137,11 +121,10 @@ document.querySelector(".clear-btn").addEventListener('click', () => {
         element.value = '';
     });
     
-    // Clear all localStorage data including image
-    localStorage.clear();
     localStorage.clear();
 });
 
+// Przycisk Generate
 document.querySelector(".generate-btn").addEventListener('click', () => {
     document.querySelectorAll(".input_holder").forEach((element) => {
         var input = element.querySelector(".input");
@@ -184,11 +167,13 @@ document.querySelector(".generate-btn").addEventListener('click', () => {
     });
 });
 
+// Przycisk GO - główna logika
 document.querySelector(".go").addEventListener('click', () => {
     var empty = [];
     var params = new URLSearchParams();
-    params.set("sex", sex)
+    params.set("sex", sex);
     
+    // Walidacja obrazka
     const imageInput = document.querySelector("#image");
     if (!imageInput.value || !imageInput.value.includes('imgur.com')){
         empty.push(imageInput.parentElement);
@@ -197,25 +182,26 @@ document.querySelector(".go").addEventListener('click', () => {
         params.set("image", imageInput.value);
     }
 
+    // Walidacja daty urodzenia
     var birthday = "";
     var dateEmpty = false;
     document.querySelectorAll(".date_input").forEach((element) => {
-        birthday = birthday + "." + element.value
+        birthday = birthday + "." + element.value;
         if (isEmpty(element.value)){
             dateEmpty = true;
         }
-    })
-
+    });
     birthday = birthday.substring(1);
 
     if (dateEmpty){
         var dateElement = document.querySelector(".date");
         dateElement.classList.add("error_shown");
         empty.push(dateElement);
-    }else{
-        params.set("birthday", birthday)
+    } else {
+        params.set("birthday", birthday);
     }
 
+    // Walidacja pozostałych pól
     document.querySelectorAll(".input_holder").forEach((element) => {
         var input = element.querySelector(".input");
         if (isEmpty(input.value)) {
@@ -228,47 +214,60 @@ document.querySelector(".go").addEventListener('click', () => {
 
     if (empty.length != 0){
         empty[0].scrollIntoView();
-    }else{
+    } else {
         forwardToId(params);
     }
 });
 
 function isEmpty(value){
-
-    let pattern = /^\s*$/
+    let pattern = /^\s*$/;
     return pattern.test(value);
-
 }
 
-function forwardToId(params){
+// Funkcja przekierowująca - ZMODYFIKOWANA
+function forwardToId(params) {
+    // Zapisz obrazek
     const imageData = params.get('image');
-    
     if (imageData) {
         localStorage.setItem('userImage', imageData);
         params.delete('image');
     }
     
-    // Save form data to localStorage
-    document.querySelectorAll(".input_holder").forEach((element) => {
-        const input = element.querySelector(".input");
-        if (input && input.value) {
+    // Zapisz datę urodzenia
+    const day = document.getElementById("day").value;
+    const month = document.getElementById("month").value;
+    const year = document.getElementById("year").value;
+    if (day && month && year) {
+        localStorage.setItem("birthDay", day);
+        localStorage.setItem("birthMonth", month);
+        localStorage.setItem("birthYear", year);
+    }
+    
+    // Zapisz pozostałe dane
+    document.querySelectorAll(".input_holder .input").forEach(input => {
+        if (input.value) {
             localStorage.setItem(input.id, input.value);
         }
     });
     
+    // Przekieruj
     location.href = "./id.html?" + params.toString();
 }
 
-// Load saved form data when page loads
+// Wczytywanie zapisanych danych przy starcie - NOWA FUNKCJA
 window.addEventListener('load', () => {
-    document.querySelectorAll(".input_holder").forEach((element) => {
-        const input = element.querySelector(".input");
-        if (input && localStorage.getItem(input.id)) {
-            input.value = localStorage.getItem(input.id);
-        }
+    // Wczytaj datę urodzenia
+    document.getElementById("day").value = localStorage.getItem("birthDay") || "";
+    document.getElementById("month").value = localStorage.getItem("birthMonth") || "";
+    document.getElementById("year").value = localStorage.getItem("birthYear") || "";
+    
+    // Wczytaj pozostałe dane
+    document.querySelectorAll(".input_holder .input").forEach(input => {
+        input.value = localStorage.getItem(input.id) || "";
     });
 });
 
+// Nawigacja
 function sendTo(page) {
     switch(page) {
         case 'home':
@@ -289,13 +288,8 @@ function sendTo(page) {
     }
 }
 
+// Obsługa przewodnika
 var guide = document.querySelector(".guide_holder");
 guide.addEventListener('click', () => {
-
-    if (guide.classList.contains("unfolded")){
-        guide.classList.remove("unfolded");
-    }else{
-        guide.classList.add("unfolded");
-    }
-
-})
+    guide.classList.toggle("unfolded");
+});
