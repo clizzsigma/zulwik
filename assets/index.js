@@ -1,7 +1,4 @@
-// ====== CZYSZCZENIE TOKENU PRZY WEJŚCIU ======
-localStorage.removeItem("formToken");
-
-// ====== OBSŁUGA MOTYWU ======
+// Obsługa motywu
 const themeToggle = document.querySelector('.theme-toggle');
 const themePanel = document.querySelector('.theme-panel');
 
@@ -24,6 +21,7 @@ document.querySelectorAll('.theme-option').forEach(option => {
 
 function applyTheme(theme) {
     const root = document.documentElement;
+    
     switch(theme) {
         case 'dark':
             root.style.setProperty('--main-color', '#ffffff');
@@ -49,22 +47,30 @@ function applyTheme(theme) {
     }
 }
 
-// ====== OBSŁUGA SELECTOR BOX ======
+// Obsługa selector box
 var selector = document.querySelector(".selector_box");
 selector.addEventListener('click', () => {
     selector.classList.toggle("selector_open");
-});
+})
 
-// ====== OBSŁUGA PŁCI ======
+// Obsługa pól daty
+document.querySelectorAll(".date_input").forEach((element) => {
+    element.addEventListener('click', () => {
+        document.querySelector(".date").classList.remove("error_shown");
+    })
+})
+
+// Domyślna płeć
 var sex = "m";
+
 document.querySelectorAll(".selector_option").forEach((option) => {
     option.addEventListener('click', () => {
         sex = option.id;
         document.querySelector(".selected_text").innerHTML = option.innerHTML;
-    });
-});
+    })
+})
 
-// ====== OBSŁUGA ZDJĘCIA ======
+// Obsługa uploadu zdjęcia
 const input = document.querySelector("#image");
 const previewModal = document.querySelector('.image-preview-modal');
 const previewImage = document.querySelector('.preview-image');
@@ -90,7 +96,7 @@ previewModal.addEventListener('click', (e) => {
     }
 });
 
-// ====== GENEROWANIE DANYCH ======
+// Listy przykładowych danych
 const randomMaleSurnames = ["Kowalski", "Nowak", "Wiśniewski", "Wójcik", "Kowalczyk", "Kamiński", "Lewandowski", "Zieliński", "Szymański", "Woźniak"];
 const randomFemaleSurnames = ["Kowalska", "Nowak", "Wiśniewska", "Wójcik", "Kowalczyk", "Kamińska", "Lewandowska", "Zielińska", "Szymańska", "Woźniak"];
 const randomCities = ["Warszawa", "Kraków", "Łódź", "Wrocław", "Poznań", "Gdańsk", "Szczecin", "Bydgoszcz", "Lublin", "Katowice"];
@@ -101,36 +107,37 @@ function getRandomElement(array) {
 }
 
 function generateRandomPostcode() {
-    return `${Math.floor(Math.random() * 90 + 10)}-${Math.floor(Math.random() * 900 + 100)}`;
+    return String(Math.floor(Math.random() * 90 + 10)) + "-" + String(Math.floor(Math.random() * 900 + 100));
 }
 
-// ====== PRZYCISK CLEAR ======
+// Przycisk Clear
 document.querySelector(".clear-btn").addEventListener('click', () => {
-    document.querySelectorAll(".input_holder .input").forEach(input => {
+    document.querySelectorAll(".input_holder").forEach((element) => {
+        var input = element.querySelector(".input");
         input.value = '';
     });
     
-    document.querySelectorAll(".date_input").forEach(input => {
-        input.value = '';
+    document.querySelectorAll(".date_input").forEach((element) => {
+        element.value = '';
     });
     
     localStorage.clear();
 });
 
-// ====== PRZYCISK GENERATE ======
+// Przycisk Generate
 document.querySelector(".generate-btn").addEventListener('click', () => {
     document.querySelectorAll(".input_holder").forEach((element) => {
-        const input = element.querySelector(".input");
+        var input = element.querySelector(".input");
         let randomValue = "";
-        
         switch(input.id) {
             case "surname":
-            case "familyName":
                 randomValue = sex === "m" ? getRandomElement(randomMaleSurnames) : getRandomElement(randomFemaleSurnames);
                 break;
             case "nationality":
-            case "countryOfBirth":
                 randomValue = "POLSKA";
+                break;
+            case "familyName":
+                randomValue = sex === "m" ? getRandomElement(randomMaleSurnames) : getRandomElement(randomFemaleSurnames);
                 break;
             case "fathersFamilyName":
                 randomValue = getRandomElement(randomMaleSurnames);
@@ -139,54 +146,65 @@ document.querySelector(".generate-btn").addEventListener('click', () => {
                 randomValue = getRandomElement(randomFemaleSurnames);
                 break;
             case "birthPlace":
-            case "city":
                 randomValue = getRandomElement(randomCities);
                 break;
+            case "countryOfBirth":
+                randomValue = "POLSKA";
+                break;
             case "adress1":
-                randomValue = `ul. ${getRandomElement(randomStreets)} ${Math.floor(Math.random() * 100 + 1)}`;
+                randomValue = "ul. " + getRandomElement(randomStreets) + " " + Math.floor(Math.random() * 100 + 1);
                 break;
             case "adress2":
                 randomValue = generateRandomPostcode();
                 break;
+            case "city":
+                randomValue = getRandomElement(randomCities);
+                break;
         }
-        
         if (randomValue && input.id !== "name") {
             input.value = randomValue;
         }
     });
 });
 
-// ====== WALIDACJA I PRZEKIEROWANIE ======
+// Przycisk GO - główna logika
 document.querySelector(".go").addEventListener('click', () => {
-    const empty = [];
-    const params = new URLSearchParams();
+    var empty = [];
+    var params = new URLSearchParams();
     params.set("sex", sex);
     
     // Walidacja obrazka
     const imageInput = document.querySelector("#image");
-    if (!imageInput.value || !imageInput.value.includes('imgur.com')) {
+    if (!imageInput.value || !imageInput.value.includes('imgur.com')){
         empty.push(imageInput.parentElement);
         imageInput.parentElement.classList.add("error_shown");
     } else {
         params.set("image", imageInput.value);
     }
 
-    // Walidacja daty
-    const day = document.getElementById("day").value;
-    const month = document.getElementById("month").value;
-    const year = document.getElementById("year").value;
-    
-    if (!day || !month || !year) {
-        document.querySelector(".date").classList.add("error_shown");
-        empty.push(document.querySelector(".date"));
+    // Walidacja daty urodzenia
+    var birthday = "";
+    var dateEmpty = false;
+    document.querySelectorAll(".date_input").forEach((element) => {
+        birthday = birthday + "." + element.value;
+        if (isEmpty(element.value)){
+            dateEmpty = true;
+        }
+    });
+    birthday = birthday.substring(1);
+
+    if (dateEmpty){
+        var dateElement = document.querySelector(".date");
+        dateElement.classList.add("error_shown");
+        empty.push(dateElement);
     } else {
-        params.set("birthday", `${day}.${month}.${year}`);
+        params.set("birthday", birthday);
     }
 
     // Walidacja pozostałych pól
     document.querySelectorAll(".input_holder").forEach((element) => {
-        const input = element.querySelector(".input");
-        if (!input.value.trim()) {
+        var input = element.querySelector(".input");
+        if (isEmpty(input.value)) {
             empty.push(element);
             element.classList.add("error_shown");
         } else {
@@ -194,34 +212,84 @@ document.querySelector(".go").addEventListener('click', () => {
         }
     });
 
-    if (empty.length > 0) {
-        empty[0].scrollIntoView({ behavior: 'smooth' });
+    if (empty.length != 0){
+        empty[0].scrollIntoView();
     } else {
         forwardToId(params);
     }
 });
 
-// ====== FUNKCJA PRZEKIEROWUJĄCA (Z TOKENEM) ======
-function forwardToId(params) {
-    // Generuj token
-    const token = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-    localStorage.setItem("formToken", token);
-    
-    // Zapisz wszystkie dane
-    localStorage.setItem("birthDay", document.getElementById("day").value);
-    localStorage.setItem("birthMonth", document.getElementById("month").value);
-    localStorage.setItem("birthYear", document.getElementById("year").value);
-    
-    document.querySelectorAll(".input_holder .input").forEach(input => {
-        localStorage.setItem(input.id, input.value);
-    });
-
-    // Przekieruj z tokenem (blokując powrót)
-    params.append("token", token);
-    window.location.replace(`./id.html?${params.toString()}`);
+function isEmpty(value){
+    let pattern = /^\s*$/;
+    return pattern.test(value);
 }
 
-// ====== OBSŁUGA PRZEWODNIKA ======
-document.querySelector(".guide_holder").addEventListener('click', () => {
-    document.querySelector(".guide_holder").classList.toggle("unfolded");
+// Funkcja przekierowująca - ZMODYFIKOWANA
+function forwardToId(params) {
+    // Zapisz obrazek
+    const imageData = params.get('image');
+    if (imageData) {
+        localStorage.setItem('userImage', imageData);
+        params.delete('image');
+    }
+    
+    // Zapisz datę urodzenia
+    const day = document.getElementById("day").value;
+    const month = document.getElementById("month").value;
+    const year = document.getElementById("year").value;
+    if (day && month && year) {
+        localStorage.setItem("birthDay", day);
+        localStorage.setItem("birthMonth", month);
+        localStorage.setItem("birthYear", year);
+    }
+    
+    // Zapisz pozostałe dane
+    document.querySelectorAll(".input_holder .input").forEach(input => {
+        if (input.value) {
+            localStorage.setItem(input.id, input.value);
+        }
+    });
+    
+    // Przekieruj
+    location.href = "./id.html?" + params.toString();
+}
+
+// Wczytywanie zapisanych danych przy starcie - NOWA FUNKCJA
+window.addEventListener('load', () => {
+    // Wczytaj datę urodzenia
+    document.getElementById("day").value = localStorage.getItem("birthDay") || "";
+    document.getElementById("month").value = localStorage.getItem("birthMonth") || "";
+    document.getElementById("year").value = localStorage.getItem("birthYear") || "";
+    
+    // Wczytaj pozostałe dane
+    document.querySelectorAll(".input_holder .input").forEach(input => {
+        input.value = localStorage.getItem(input.id) || "";
+    });
+});
+
+// Nawigacja
+function sendTo(page) {
+    switch(page) {
+        case 'home':
+            location.href = "home.html";
+            break;
+        case 'documents':
+            location.href = "documents.html";
+            break;
+        case 'services':
+            location.href = "services.html";
+            break;
+        case 'qr':
+            location.href = "qr.html";
+            break;
+        case 'more':
+            location.href = "more.html";
+            break;
+    }
+}
+
+// Obsługa przewodnika
+var guide = document.querySelector(".guide_holder");
+guide.addEventListener('click', () => {
+    guide.classList.toggle("unfolded");
 });
