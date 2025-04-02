@@ -11,6 +11,14 @@
     <meta name="mobile-web-app-capable" content="yes">
 </head>
 <body>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const urlToken = new URLSearchParams(window.location.search).get('token');
+    if (!urlToken || urlToken !== localStorage.getItem("formToken")) {
+        window.location.href = "./index.html";
+    }
+});
+        <script>
     <div class="background"></div>
     <div class="top_grid">
         <img class="logo" src="https://i.imgur.com/wEDerI2.png">
