@@ -221,3 +221,23 @@ p, input{
     margin-right: 0px;
     margin-left: auto;
 }
+/* ===== UKŁAD PRZYCISKÓW ===== */
+.button-container {
+  display: flex;
+  flex-direction: column; /* Ustawia w kolumnie */
+  align-items: center;    /* Wyśrodkowanie */
+  gap: 15px;             /* Odstęp między przyciskami */
+  margin-top: 20px;      /* Odstęp od innych elementów */
+}
+
+/* Przycisk "Wejdź" na górze */
+.go {
+  order: -1;            /* Wymusza pozycję na początku */
+  margin-bottom: 10px;  /* Dodatkowy odstęp */
+}
+
+/* Przyciski "Generuj" i "Wyczyść" obok siebie */
+.generate-btn, .clear-btn {
+  display: inline-block; /* Ustawia w linii */
+  margin: 0 5px;        /* Odstęp poziomy */
+}
